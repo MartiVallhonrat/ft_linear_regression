@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from train import trainModel
+from r_squared import rSquare
 
 def getEstPrice(theta0, theta1, estimatePrice):
     try:
@@ -24,16 +25,17 @@ def drawDataset(df):
     plt.scatter(df.iloc[:, 0], df.iloc[:, 1], marker="o", color="blue")
     plt.savefig("plot.png")
 
-def drawRegression(theta0, theta1):
-    plt.axline(xy1=(0, theta0), slope=theta1, color="green", label="Linear Regression")
+def drawRegression(theta0, theta1, r_squared):
+    plt.axline(xy1=(0, theta0), slope=theta1, color="green", label=f"Linear Regression (R^2={r_squared:.2f})")
     plt.legend()
     plt.savefig("plot.png")
     
+    
 def main():
-    plt.title("Car Price-Milage Correlation")
+    plt.title("Car Price-Milage")
     plt.grid("True")
-    plt.ylabel("Price")
-    plt.xlabel("Milage")
+    plt.ylabel("Price(euros)")
+    plt.xlabel("Milage(km)")
     plt.savefig("plot.png")
 
     program_input = ""
@@ -45,13 +47,13 @@ def main():
     while program_input != "EXIT":
         
         try:
-            program_input = input("\nWHAT CAN I DO FOR YOU?:\n\t- ESTIMATE CAR PRICE (ESTIMATE)\n\t- TRAIN MODEL (TRAIN)\n\t- EXIT PROGRAM (EXIT)\n\n- ")
+            program_input = input("\nWHAT CAN I DO FOR YOU?:\n\t- ESTIMATE CAR PRICE (ESTIM)\n\t- TRAIN MODEL (TRAIN)\n\t- RESTART COEFFICIENTS (REST)\n\t- EXIT PROGRAM (EXIT)\n\n- ")
         except KeyboardInterrupt:
             break
         except Exception:
             break
 
-        if program_input == "ESTIMATE":
+        if program_input == "ESTIM":
             getEstPrice(theta0, theta1, estimatePrice)
         elif program_input == "TRAIN":
             try:
@@ -61,10 +63,19 @@ def main():
                 continue
             
             drawDataset(df)
-            theta = trainModel(df, theta0, theta1, estimatePrice)
+            try:
+                theta = trainModel(df, theta0, theta1, estimatePrice)
+            except KeyboardInterrupt:
+                continue
+            except Exception as e:
+                print(f"\n---> ERROR: {e} <---")
+                continue
             theta0 = theta[0]
-            theta1 = theta[1]  
-            drawRegression(theta0, theta1)
+            theta1 = theta[1]
+            drawRegression(theta0, theta1, rSquare(df, theta0, theta1, estimatePrice))
+        elif program_input == "REST":
+            theta0 = 0
+            theta1 = 0
     
     print("\nGOODBYE!")
             
