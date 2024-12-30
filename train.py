@@ -68,8 +68,6 @@ def minibatchGD(df, theta0, theta1, estimatePrice):
 
     # MAX NUMBER OF STEPS 1000 OR if step size is < than 0,001 (we consider is almost exact)
     for i in range(1000):
-        if (i == 999):
-            print("AAAAAAAAAAAAAAAAAAAAAAAAAA")
         batch_size = 4
         i_from = 0
 
