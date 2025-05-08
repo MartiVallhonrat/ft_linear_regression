@@ -6,17 +6,17 @@ from r_squared import rSquare
 
 def getEstPrice(theta0, theta1, estimatePrice):
     try:
-        milage = int(input("PLEASE ENTER THE MILAGE: "))
+        mileage = int(input("PLEASE ENTER THE MILEAGE: "))
     except KeyboardInterrupt:
         return
     except Exception as e:
         print(f"\n---> ERROR: {e} <---")
         return
     
-    estimated_price = estimatePrice(theta0, theta1, milage)
+    estimated_price = estimatePrice(theta0, theta1, mileage)
 
-    marker = plt.plot(milage, estimated_price, marker="o", color="red")[0]
-    text = plt.text(milage, estimated_price, f"Estimated Price({milage}, {estimated_price})", color="red")
+    marker = plt.plot(mileage, estimated_price, marker="o", color="red")[0]
+    text = plt.text(mileage, estimated_price, f"Estimated Price({mileage}, {estimated_price})", color="red")
     plt.savefig("plot.png")
     marker.remove()
     text.remove()
@@ -32,14 +32,14 @@ def drawRegression(theta0, theta1, r_squared):
     
     
 def main():
-    plt.title("Car Price-Milage")
+    plt.title("Car Price-Mileage")
     plt.grid("True")
     plt.ylabel("Price(euros)")
-    plt.xlabel("Milage(km)")
+    plt.xlabel("Mileage(km)")
     plt.savefig("plot.png")
 
     program_input = ""
-    estimatePrice = lambda theta0, theta1, milage: theta0 + theta1 * milage
+    estimatePrice = lambda theta0, theta1, mileage: theta0 + theta1 * mileage
     theta0 = 0
     theta1 = 0
 
